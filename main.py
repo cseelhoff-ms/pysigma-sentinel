@@ -2,7 +2,7 @@ from sigma.collection import SigmaCollection
 from sigma.backends.azure import AzureBackend
 from sigma.pipelines.azure import azure_windows_pipeline
 from sigma.rule import SigmaRule
-from datetime import date
+#from datetime import date
 from sigma.rule import SigmaRuleTag
 import json
 import re
@@ -11,10 +11,10 @@ with open('template.json', 'r') as f:
     templateContents = f.read()
 
 backend: AzureBackend = AzureBackend(processing_pipeline=azure_windows_pipeline())
-procCollection: SigmaCollection = SigmaCollection.load_ruleset(['./process_creation/'])
-sigmaRules: list[SigmaRule] = procCollection.rules
+procCollection: SigmaCollection = SigmaCollection.load_ruleset(['./process_creation'])
+sigmaRules: 'list[SigmaRule]' = procCollection.rules
 #create a hashset for unique tactics and techniques
-tacticSigmaDict: dict[str, str] = {
+tacticSigmaDict: 'dict[str, str]' = {
     'reconnaissance':'Reconnaissance',
     'resource_development':'ResourceDevelopment',
     'initial_access':'InitialAccess',
@@ -33,7 +33,7 @@ tacticSigmaDict: dict[str, str] = {
     'inhibit_response_function':'InhibitResponseFunction'
 }
 
-subTactics: dict[str, list[str]] = {
+subTactics: 'dict[str, list[str]]' = {
     'Reconnaissance':["T1595.001", "T1595.002", "T1592.001", "T1592.002", "T1592.003", "T1592.004", "T1589.001", "T1589.002", "T1589.003", "T1590.001", "T1590.002", "T1590.003", "T1590.004", "T1590.005", "T1590.006", "T1591.001", "T1591.002", "T1591.003", "T1591.004", "T1598.001", "T1598.002", "T1598.003", "T1597.001", "T1597.002", "T1596.001", "T1596.002", "T1596.003", "T1596.004", "T1596.005", "T1593.001", "T1593.002"],
     'ResourceDevelopment':["T1583.001", "T1583.002", "T1583.003", "T1583.004", "T1583.005", "T1583.006", "T1586.001", "T1586.002", "T1584.001", "T1584.002", "T1584.003", "T1584.004", "T1584.005", "T1584.006", "T1587.001", "T1587.002", "T1587.003", "T1587.004", "T1585.001", "T1585.002", "T1588.001", "T1588.002", "T1588.003", "T1588.004", "T1588.005", "T1588.006", "T1608.001", "T1608.002", "T1608.003", "T1608.004", "T1608.005"],
     'InitialAccess':["T1566.001", "T1566.002", "T1566.003", "T1195.001", "T1195.002", "T1195.003", "T1078.001", "T1078.002", "T1078.003", "T1078.004"],
@@ -50,12 +50,12 @@ subTactics: dict[str, list[str]] = {
     'Impact':["T1565.001", "T1565.002", "T1565.003", "T1491.001", "T1491.002", "T1561.001", "T1561.002", "T1499.001", "T1499.002", "T1499.003", "T1499.004", "T1498.001", "T1498.002"]
 }
 
-subTechniquesDict: dict[str, str] = {}
+subTechniquesDict: 'dict[str, str]' = {}
 for key in subTactics:
     for tactic in subTactics[key]:
         subTechniquesDict[tactic] = key
 
-mainTactics: dict[str, list[str]] = {
+mainTactics: 'dict[str, list[str]]' = {
     'Reconnaissance' : ["T1595", "T1592", "T1589", "T1590", "T1591", "T1598", "T1597", "T1596", "T1593", "T1594"],
     'ResourceDevelopment' : ["T1583", "T1586", "T1584", "T1587", "T1585", "T1588", "T1608"],
     'InitialAccess' : ["T1189", "T1190", "T1133", "T1200", "T1566", "T1091", "T1195", "T1199", "T1078"],
@@ -72,7 +72,7 @@ mainTactics: dict[str, list[str]] = {
     'Impact' : ["T1531", "T1485", "T1486", "T1565", "T1491", "T1561", "T1499", "T1495", "T1490", "T1498", "T1496", "T1489", "T1529"]
 }
 
-mainTechniquesDict: dict[str, str] = {}
+mainTechniquesDict: 'dict[str, str]' = {}
 for key in mainTactics:
     for tactic in mainTactics[key]:
         mainTechniquesDict[tactic] = key
@@ -103,10 +103,10 @@ ruleidLevelDict = {
 
 for levelFilter in severityLevelDict.keys():
 
-    combinedTactics: set[str] = set()
-    combinedTechniques: set[str] = set()
+    combinedTactics: 'set[str]' = set()
+    combinedTechniques: 'set[str]' = set()
     combinedQuery: str = ''
-    ruleids: list[str] = []
+    ruleids: 'list[str]' = []
 
     queryIndex = 0
     fileIndex = 0
@@ -117,13 +117,13 @@ for levelFilter in severityLevelDict.keys():
             continue
         author: str = sigmaRule.author if sigmaRule.author is not None else ""
         description: str = sigmaRule.description if sigmaRule.description is not None else ""
-        falsepositives: list[str] = sigmaRule.falsepositives
+        falsepositives: 'list[str]' = sigmaRule.falsepositives
         ruleid: str = str(sigmaRule.id)
 #        if ruleid == '24e3e58a-646b-4b50-adef-02ef935b9fc8':
 #            continue
         #ruleid = ruleid.replace('-', '')
         date_modified: str = str(sigmaRule.modified)
-        references: list[str] = sigmaRule.references
+        references: 'list[str]' = sigmaRule.references
         sourceURL: str = str(sigmaRule.source.path)
         status: str = str(sigmaRule.status)
         title: str = sigmaRule.title
@@ -134,10 +134,10 @@ for levelFilter in severityLevelDict.keys():
         #description += '\nReferences: ' + ', '.join(references)
         #description += '\nFalse Positives: ' + ', '.join(falsepositives) 
             
-        tactics: set[str] = set()
-        techniques: set[str] = set()
+        tactics: 'set[str]' = set()
+        techniques: 'set[str]' = set()
 
-        sigmaTags: list[SigmaRuleTag] = sigmaRule.tags
+        sigmaTags: 'list[SigmaRuleTag]' = sigmaRule.tags
         for tag in sigmaTags:
             tagName = tag.name.upper()
             if tagName in tacticSigmaDict:
@@ -151,7 +151,7 @@ for levelFilter in severityLevelDict.keys():
                     tactics.add(mainTechniquesDict[mainTechnique])
                     techniques.add(mainTechnique)
     
-        convertedStrings: list[str] = backend.convert_rule(sigmaRule)
+        convertedStrings: 'list[str]' = backend.convert_rule(sigmaRule)
 
         newQuery = convertedStrings[0].replace('Hashes contains "IMPHASH=', 'TargetProcessIMPHASH=~"')
         newQuery = newQuery.replace('Hashes =~ "IMPHASH=', 'TargetProcessIMPHASH=~"')
@@ -189,7 +189,7 @@ for levelFilter in severityLevelDict.keys():
             ruleid = '5163A000-5160-5160-5160-5163A0000' + ruleidLevelDict[levelFilter] + fileIndexString
             newTemplate: str = templateContents.replace('---RULEID---', ruleid).replace('---TITLE---', '"Sigma Windows Process Creation ' +  severityLevelDict[levelFilter] + ' ' + fileIndexString + '"').replace('---DESCRIPTION---', '"Sigma Windows Process Creation ' + severityLevelDict[levelFilter] + ' ' + fileIndexString  + '"').replace('---LEVEL---', severityLevelDict[levelFilter]).replace('---QUERY---', combinedQuery).replace('---TACTICS---', tacticsString).replace('---TECHNIQUES---', techniquesString)#.replace('---TAGS---', tagsString)
             #write newTemplate to file
-            with open('./output/Sigma Windows Process Creation ' + levelFilter + ' ' + fileIndexString + '.json', 'w') as f:
+            with open('./output/Sigma Windows Process Creation ' + severityLevelDict[levelFilter] + ' ' + fileIndexString + '.json', 'w') as f:
                 f.write(newTemplate)
             fileIndex += 1
             combinedQuery = ''
@@ -224,5 +224,5 @@ for levelFilter in severityLevelDict.keys():
     ruleid = '5163A000-5160-5160-5160-5163A0000' + ruleidLevelDict[levelFilter] + fileIndexString
     newTemplate: str = templateContents.replace('---RULEID---', ruleid).replace('---TITLE---', '"Sigma Windows Process Creation ' +  severityLevelDict[levelFilter] + ' ' + fileIndexString + '"').replace('---DESCRIPTION---', '"Sigma Windows Process Creation ' + severityLevelDict[levelFilter] + ' ' + fileIndexString  + '"').replace('---LEVEL---', severityLevelDict[levelFilter]).replace('---QUERY---', combinedQuery).replace('---TACTICS---', tacticsString).replace('---TECHNIQUES---', techniquesString)#.replace('---TAGS---', tagsString)
     #write newTemplate to file
-    with open('./output/Sigma Windows Process Creation ' + levelFilter + ' ' + fileIndexString + '.json', 'w') as f:
+    with open('./output/Sigma Windows Process Creation ' + severityLevelDict[levelFilter] + ' ' + fileIndexString + '.json', 'w') as f:
         f.write(newTemplate)
