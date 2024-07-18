@@ -11,7 +11,7 @@ with open('template.json', 'r') as f:
     templateContents = f.read()
 
 backend: AzureBackend = AzureBackend(processing_pipeline=azure_windows_pipeline())
-procCollection: SigmaCollection = SigmaCollection.load_ruleset(['./process_creation'])
+procCollection: SigmaCollection = SigmaCollection.load_ruleset(['./dns_rules'])
 sigmaRules: 'list[SigmaRule]' = procCollection.rules
 #create a hashset for unique tactics and techniques
 tacticSigmaDict: 'dict[str, str]' = {
