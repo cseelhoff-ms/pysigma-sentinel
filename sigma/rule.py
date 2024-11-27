@@ -53,6 +53,7 @@ class SigmaLevel(EnumLowercaseStringMixin, Enum):
 
 
 class SigmaRelatedType(EnumLowercaseStringMixin, Enum):
+    OBSOLETE = auto()
     OBSOLETES = auto()
     RENAMED = auto()
     MERGED = auto()

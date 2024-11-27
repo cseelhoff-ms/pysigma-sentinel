@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-from pyparsing import List
+#from pyparsing import List
 
 
 @dataclass
